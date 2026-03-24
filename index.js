@@ -67,10 +67,7 @@ app.post('/api/users/:id/deposit', (req, res) => {
   const user = users.get(req.params.id);
   if (!user) return res.status(404).json({ error: '用户不存在' });
 
-  if (user.credits < amount) {
-    return res.status(400).json({ error: '积分不足' });
-  }
-
+  // 允许积分为负数
   const balance_before = user.credits;
   const balance_after = user.credits - amount;
   user.credits = balance_after;
