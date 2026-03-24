@@ -56,12 +56,21 @@ function updateRoomActivity(roomId) {
   }
 }
 
+// 生成6位数字房间号
+function generateRoomId() {
+  return Math.random().toString().slice(2, 8);
+}
+
 // 创建房间
 app.post('/api/rooms', (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: '房间名称不能为空' });
 
-  const id = uuidv4().slice(0, 8);
+  let id = generateRoomId();
+  // 确保房间号唯一
+  while (rooms.has(id)) {
+    id = generateRoomId();
+  }
   const now = new Date().toISOString();
   rooms.set(id, { id, name, total_credits: 0, created_at: now, last_activity: now });
 
