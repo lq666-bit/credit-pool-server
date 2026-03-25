@@ -61,9 +61,9 @@ async function initDB() {
   }
 }
 
-// 生成6位数字房间号
+// 生成4位数字房间号
 function generateRoomId() {
-  return Math.random().toString().slice(2, 8);
+  return Math.random().toString().slice(2, 6);
 }
 
 // 清理24小时无活动的房间
