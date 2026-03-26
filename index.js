@@ -241,9 +241,10 @@ app.post('/api/users/:id/withdraw', async (req, res) => {
     }
     const user = userResult.rows[0];
 
-    // 检查积分池余额
-    if (user.credits < amount) {
-      return res.status(400).json({ error: '积分不足' });
+    // 检查积分池余额（房间总积分）
+    const roomResult = await client.query('SELECT total_credits FROM rooms WHERE id = $1', [user.room_id]);
+    if (roomResult.rows.length === 0 || roomResult.rows[0].total_credits < amount) {
+      return res.status(400).json({ error: '积分池余额不足' });
     }
 
     // 更新用户积分 (取出是增加，所以是正数)
